@@ -1,14 +1,14 @@
 {
   "name": "react-native-paypal-module",
-  "version": "1.0.9",
+  "version": "1.0.10-0",
   "description": "A wrapper for the paypal sdk for both android and ios.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/noddy1996/react-native-paypal.git"
+    "type": "git",
+    "url": "https://github.com/noddy1996/react-native-paypal.git"
   },
   "keywords": [
     "react-native",
