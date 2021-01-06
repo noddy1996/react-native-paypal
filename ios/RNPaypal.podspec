@@ -13,7 +13,7 @@ Pod::Spec.new do |s|
   # s.license      = { :type => "MIT", :file => "FILE_LICENSE" }
   s.author             = { "noddy1996" => "shammi.rathore66@gmail.com" }
   s.platform     = :ios, "7.0"
-  s.source       = { :git => "https://github.com/zeddz92/react-native-paypal.git", :tag => "master" }
+  s.source       = { :git => "https://github.com/noddy1996/react-native-paypal.git", :tag => "master" }
   s.source_files  = "RNPaypal/**/*.{h,m}"
   s.requires_arc = true
 
