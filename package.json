@@ -1,0 +1,27 @@
+{
+  "name": "react-native-paypal-module",
+  "version": "1.0.9",
+  "description": "A wrapper for the paypal sdk for both android and ios.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/zeddz92/react-native-paypal.git"
+  },
+  "keywords": [
+    "react-native",
+    "android",
+    "ios",
+    "react-native-paypal",
+    "paypal sdk",
+    "paypal"
+  ],
+  "author": "shammi rathore <shammi.rathore66@gmail.com>",
+  "license": "MIT",
+  "peerDependencies": {
+    "react-native": "^0.41.2",
+    "react-native-windows": "0.41.0-rc.1"
+  }
+}
