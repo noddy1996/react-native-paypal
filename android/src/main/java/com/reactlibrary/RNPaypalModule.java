@@ -8,11 +8,11 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import com.facebook.internal.BundleJSONConverter;
 import com.facebook.react.bridge.ActivityEventListener;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
+import com.facebook.react.bridge.BaseActivityEventListener;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.Callback;
@@ -25,16 +25,17 @@ import com.paypal.android.sdk.payments.PaymentActivity;
 import com.paypal.android.sdk.payments.PaymentConfirmation;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
-
-import host.exp.expoview.Exponent;
-
-public class RNPaypalModule extends ReactContextBaseJavaModule implements ActivityEventListener {
+import java.util.Set;
+import com.reactlibrary.utils.BundleJSONConverter;
 
 
+public class RNPaypalModule extends ReactContextBaseJavaModule  {
 
   private final ReactApplicationContext reactContext;
   private Promise mPromise;
@@ -45,20 +46,19 @@ public class RNPaypalModule extends ReactContextBaseJavaModule implements Activi
   private static final String E_ACTIVITY_DOES_NOT_EXIST = "E_ACTIVITY_DOES_NOT_EXIST";
   private static final String E_INVALID_JSON = "E_INVALID_JSON";
 
-  private final host.exp.exponent.ActivityResultListener mActivityEventListener = new host.exp.exponent.ActivityResultListener() {
+  private final ActivityEventListener mActivityEventListener = new BaseActivityEventListener() {
+
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-      // some code here
-
-        handleActivityResult(null, requestCode, resultCode, data);
-
+    public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent intent) {
+      handleActivityResult(activity, requestCode, resultCode, intent);
     }
   };
+
 
   public RNPaypalModule(ReactApplicationContext reactContext) {
     super(reactContext);
     this.reactContext = reactContext;
-    Exponent.getInstance().addActivityResultListener(mActivityEventListener);
+    reactContext.addActivityEventListener(mActivityEventListener);
   }
 
   @Override
@@ -118,6 +118,7 @@ public class RNPaypalModule extends ReactContextBaseJavaModule implements Activi
   @Nullable
   @Override
   public Map<String, Object> getConstants() {
+    Log.v("getConstants", "handleActivityResult");
     final Map<String, Object> constants = new HashMap<>();
 
     final Map<String, Object> environment = new HashMap<>();
@@ -138,6 +139,7 @@ public class RNPaypalModule extends ReactContextBaseJavaModule implements Activi
   }
 
   public void handleActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
+    Log.v("onActivityResult", "handleActivityResult");
     if (requestCode != PAYPAL_REQUEST) {
       return;
     }
@@ -147,9 +149,9 @@ public class RNPaypalModule extends ReactContextBaseJavaModule implements Activi
               data.getParcelableExtra(PaymentActivity.EXTRA_RESULT_CONFIRMATION);
       if (confirm != null) {
         try {
-          Bundle bundle = BundleJSONConverter.convertToBundle(confirm.toJSONObject());
-          WritableMap map = Arguments.fromBundle(bundle);
-          mPromise.resolve(map);
+            Bundle bundle = BundleJSONConverter.convertToBundle(confirm.toJSONObject());
+            WritableMap map = Arguments.fromBundle(bundle);
+            mPromise.resolve(map);
         } catch (JSONException e) {
           mPromise.reject(E_INVALID_JSON, "Invalid json");
         }
@@ -161,16 +163,15 @@ public class RNPaypalModule extends ReactContextBaseJavaModule implements Activi
     }
   }
 
-
-
-  @Override
-  public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
-    handleActivityResult(activity, requestCode, resultCode, data);
+  public static Bundle jsonToBundle(JSONObject jsonObject) throws JSONException {
+    Bundle bundle = new Bundle();
+    Iterator iter = jsonObject.keys();
+    while(iter.hasNext()){
+      String key = (String)iter.next();
+      String value = jsonObject.getString(key);
+      bundle.putString(key,value);
+    }
+    return bundle;
   }
 
-  @Override
-  public void onNewIntent(Intent intent) {
-
-
-  }
 }

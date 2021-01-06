@@ -4,7 +4,7 @@ A wrapper for the paypal sdk for both android and ios.
 
 ## Getting started
 
-`$ npm install react-native-paypal-module --save`
+`$ yarn add react-native-paypal-module`
 
 
 ## Usage
